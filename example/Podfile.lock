@@ -1,0 +1,21 @@
+PODS:
+  - Minizip (1.1.0.2016.04.24):
+    - Minizip/AES (= 1.1.0.2016.04.24)
+    - Minizip/Core (= 1.1.0.2016.04.24)
+  - Minizip/AES (1.1.0.2016.04.24):
+    - Minizip/Core
+  - Minizip/Core (1.1.0.2016.04.24)
+
+DEPENDENCIES:
+  - Minizip (from `..`)
+
+EXTERNAL SOURCES:
+  Minizip:
+    :path: ".."
+
+SPEC CHECKSUMS:
+  Minizip: c669b5daf02e13befb7653996bc2de1b28a1c116
+
+PODFILE CHECKSUM: 168acff8739766fa1c4ecfda4c84ecfffbacb5db
+
+COCOAPODS: 1.2.0.rc.1
