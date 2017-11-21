@@ -340,7 +340,7 @@ static int unzSearchCentralDir64(const zlib_filefunc64_32_def *pzlib_filefunc_de
 
 static unzFile unzOpenInternal(const void *path, zlib_filefunc64_32_def *pzlib_filefunc64_32_def)
 {
-    unz64_internal us;
+    unz64_internal us = { 0 };
     unz64_internal *s = NULL;
     uint64_t central_pos = 0;
     uint64_t central_pos64 = 0;
@@ -361,6 +361,13 @@ static unzFile unzOpenInternal(const void *path, zlib_filefunc64_32_def *pzlib_f
         fill_fopen64_filefunc(&us.z_filefunc.zfile_func64);
     else
         us.z_filefunc = *pzlib_filefunc64_32_def;
+
+    if (!(us.z_filefunc.zopen32_file || us.z_filefunc.zfile_func64.zopen64_file) ||
+        !(us.z_filefunc.zopendisk32_file || us.z_filefunc.zfile_func64.zopendisk64_file) ||
+        !(us.z_filefunc.ztell32_file || us.z_filefunc.zfile_func64.ztell64_file) ||
+        !(us.z_filefunc.zseek32_file || us.z_filefunc.zfile_func64.zseek64_file)) {
+        return NULL;
+    }
 
     us.filestream = ZOPEN64(us.z_filefunc, path, ZLIB_FILEFUNC_MODE_READ | ZLIB_FILEFUNC_MODE_EXISTING);
 
@@ -516,7 +523,7 @@ extern unzFile ZEXPORT unzOpen2_64(const void *path, zlib_filefunc64_def *pzlib_
 {
     if (pzlib_filefunc_def != NULL)
     {
-        zlib_filefunc64_32_def zlib_filefunc64_32_def_fill;
+        zlib_filefunc64_32_def zlib_filefunc64_32_def_fill = { 0 };
         zlib_filefunc64_32_def_fill.zfile_func64 = *pzlib_filefunc_def;
         zlib_filefunc64_32_def_fill.ztell32_file = NULL;
         zlib_filefunc64_32_def_fill.zseek32_file = NULL;

@@ -627,6 +627,13 @@ extern zipFile ZEXPORT zipOpen4(const void *path, int append, uint64_t disk_size
     else
         ziinit.z_filefunc = *pzlib_filefunc64_32_def;
 
+    if (!(ziinit.z_filefunc.zopen32_file || ziinit.z_filefunc.zfile_func64.zopen64_file) ||
+        !(ziinit.z_filefunc.zopendisk32_file || ziinit.z_filefunc.zfile_func64.zopendisk64_file) ||
+        !(ziinit.z_filefunc.ztell32_file || ziinit.z_filefunc.zfile_func64.ztell64_file) ||
+        !(ziinit.z_filefunc.zseek32_file || ziinit.z_filefunc.zfile_func64.zseek64_file)) {
+        return NULL;
+    }
+
     if (append == APPEND_STATUS_CREATE)
         mode = (ZLIB_FILEFUNC_MODE_READ | ZLIB_FILEFUNC_MODE_WRITE | ZLIB_FILEFUNC_MODE_CREATE);
     else
@@ -865,7 +872,7 @@ extern zipFile ZEXPORT zipOpen2_64(const void *path, int append, const char **gl
 {
     if (pzlib_filefunc_def != NULL)
     {
-        zlib_filefunc64_32_def zlib_filefunc64_32_def_fill;
+        zlib_filefunc64_32_def zlib_filefunc64_32_def_fill = { 0 };
         zlib_filefunc64_32_def_fill.zfile_func64 = *pzlib_filefunc_def;
         zlib_filefunc64_32_def_fill.ztell32_file = NULL;
         zlib_filefunc64_32_def_fill.zseek32_file = NULL;
@@ -891,7 +898,7 @@ extern zipFile ZEXPORT zipOpen3_64(const void *path, int append, uint64_t disk_s
 {
     if (pzlib_filefunc_def != NULL)
     {
-        zlib_filefunc64_32_def zlib_filefunc64_32_def_fill;
+        zlib_filefunc64_32_def zlib_filefunc64_32_def_fill = { 0 };
         zlib_filefunc64_32_def_fill.zfile_func64 = *pzlib_filefunc_def;
         zlib_filefunc64_32_def_fill.ztell32_file = NULL;
         zlib_filefunc64_32_def_fill.zseek32_file = NULL;
